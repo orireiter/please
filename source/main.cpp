@@ -7,9 +7,9 @@
 #include <filesystem>
 #include <iterator>
 
-#include "please/data_access/models.h"
 #include "please/logic/pathLogic.h"
-
+#include "please/logic/terminalLogic.h"
+#include "please/data_access/models.h"
 
 
 
@@ -17,6 +17,8 @@
 int main()
 {   
     setInitPath();
+    setConsoleToNonCanoncialMode();
+    
     std::cout << std::filesystem::current_path().string();
 
     char* input = std::find(std::begin(specialKeyboardEvents), std::end(specialKeyboardEvents), '\n');
