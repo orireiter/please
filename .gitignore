@@ -368,6 +368,7 @@ FodyWeavers.xsd
 .vscode
 please
 source/external
+build
 
 CMakeCache.txt
 cmake_install.cmake
