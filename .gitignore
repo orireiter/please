@@ -366,7 +366,6 @@ FodyWeavers.xsd
 *.vcxproj.filters
 *.sln
 .vscode
-please
 source/external
 build
 

@@ -17,9 +17,11 @@
 int main()
 {   
     setInitPath();
-    setConsoleToNonCanoncialMode();
-    
-    std::cout << std::filesystem::current_path().string();
+
+    int (*inputListener)() = getCharacterInputListener();
+
+    std::cout << inputListener() << std::endl;
+    std::cout << std::filesystem::current_path().string() << std::endl;
 
     char* input = std::find(std::begin(specialKeyboardEvents), std::end(specialKeyboardEvents), '\n');
     if (input != std::end(specialKeyboardEvents)) {
