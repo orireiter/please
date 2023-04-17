@@ -14,7 +14,7 @@
 
 void init()
 {
-    setInitPath();
+    initPath();
     initTerminal();
 };
 
@@ -22,45 +22,35 @@ void init()
 int main()
 {   
     init();
-
     int (*inputListener)() = getCharacterInputListener();
 
-    std::cout << inputListener() << std::endl;
-    std::cout << std::filesystem::current_path().string() << std::endl;
+    std::string wholeInputText;
+    int inputCharacter;
 
-    char* input = std::find(std::begin(specialKeyboardEvents), std::end(specialKeyboardEvents), '\n');
-    if (input != std::end(specialKeyboardEvents)) {
-        SpecialKeyboardEvent ori = static_cast<SpecialKeyboardEvent>(*input);
-        std::cerr << "Found at position " << static_cast<char>(ori);
-    }
-    else {
-        std::cerr << "Not found" << std::endl;
+
+    std::cout << std::filesystem::current_path().string() << " > ";
+    while ((inputCharacter = inputListener()) != EOF) {
+        if (inputCharacter == '\t') {
+            break;
+        }
+        
+        char asChar = static_cast<char>(inputCharacter);
+        wholeInputText.push_back(asChar);
+        std::cout << asChar;
     };
+
+    std::cout << wholeInputText << std::endl;
+    // std::cout << inputListener() << std::endl;
+    // std::cout << std::filesystem::current_path().string() << std::endl;
+
+    // char* input = std::find(std::begin(specialKeyboardEvents), std::end(specialKeyboardEvents), '\n');
+    // if (input != std::end(specialKeyboardEvents)) {
+    //     SpecialKeyboardEvent ori = static_cast<SpecialKeyboardEvent>(*input);
+    //     std::cerr << "Found at position " << static_cast<char>(ori);
+    // }
+    // else {
+    //     std::cerr << "Not found" << std::endl;
+    // };
 
     return 0;
 };
-
-
-/*
-#include <iostream>
-#include <cstdio>
-
-int main() {
-    std::string input;
-    int c;
-
-    std::cout << "Enter input (press tab to end): ";
-
-    while ((c = getchar()) != EOF) {
-        if (c == '\t') {
-            break;
-        }
-        input.push_back(static_cast<char>(c));
-    }
-
-    std::cout << "Input was: " << input << std::endl;
-
-    return 0;
-}
-
-*/

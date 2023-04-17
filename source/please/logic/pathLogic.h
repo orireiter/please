@@ -1,4 +1,4 @@
 #pragma once
 #include <string>
 
-void setInitPath();
+void initPath();
