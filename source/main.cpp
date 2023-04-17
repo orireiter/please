@@ -12,11 +12,16 @@
 #include "please/data_access/models.h"
 
 
+void init()
+{
+    setInitPath();
+    initTerminal();
+};
 
 
 int main()
 {   
-    setInitPath();
+    init();
 
     int (*inputListener)() = getCharacterInputListener();
 
@@ -33,7 +38,7 @@ int main()
     };
 
     return 0;
-}
+};
 
 
 /*

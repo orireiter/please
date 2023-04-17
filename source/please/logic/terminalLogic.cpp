@@ -1,12 +1,25 @@
-#include <conio.h>
+#include <stdio.h>
+
+#ifdef _WIN32
+    #include <conio.h>
+#else
+    #include <termios.h>
+#endif
 
 #include "terminalLogic.h"
 
 
-int (*getCharacterInputListener())() {
-    #ifdef _WIN32
-    	return &getch;
-	#else
-		return &getchar;
-	#endif
+void initTerminal()
+{
+
+}
+
+
+int (*getCharacterInputListener())()
+{
+#ifdef _WIN32
+    return &getch;
+#else
+    return &getchar;
+#endif
 };
