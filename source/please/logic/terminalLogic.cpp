@@ -20,7 +20,9 @@
 
     void initTerminal()
     {
+        // clear the terminal
         std::cout << "\033[H\033[2J\033[3J" ;
+        
         // save current terminal settings
         struct termios terminalSettings;
         tcgetattr(STDIN_FILENO, &terminalSettings);
