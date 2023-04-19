@@ -1,7 +1,9 @@
 #pragma once
 
 
-void initTerminal();
+namespace terminalLogic {
+    void initTerminal();
+    
+    int (*getCharacterInputListener())();
+};
 
-
-int (*getCharacterInputListener())();

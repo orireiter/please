@@ -1,3 +1,5 @@
 #pragma once
 
-void actOnInputChar(int inputChar, int (*inputListener)());
+namespace inputLogic {
+    void actOnInputChar(int inputChar);
+}

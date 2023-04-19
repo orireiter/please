@@ -18,7 +18,7 @@
     #include <unistd.h>
     #include <iostream>
 
-    void initTerminal()
+    void terminalLogic::initTerminal()
     {
         // clear the terminal
         std::cout << "\033[H\033[2J\033[3J" ;
@@ -31,7 +31,7 @@
 
     };
 
-    int (*getCharacterInputListener())()
+    int (*terminalLogic::getCharacterInputListener())()
     {
         return &getchar;
     };

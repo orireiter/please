@@ -1,4 +1,7 @@
 #pragma once
 #include <string>
 
-void initPath();
+
+namespace pathLogic {
+    void initPath();
+};

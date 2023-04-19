@@ -22,7 +22,7 @@ std::string getInitPath() {
 };
 
 
-void initPath() {
+void pathLogic::initPath() {
 	std::string initPath = getInitPath();
 	std::filesystem::current_path(initPath);
 };

@@ -23,7 +23,7 @@ void actOnEscapeSequence(int (*inputListener)()) {
 }
 
 
-void actOnInputChar(int inputChar, int (*inputListener)())
+void inputLogic::actOnInputChar(int inputChar)
 {
     switch (inputChar)
     {
@@ -36,8 +36,9 @@ void actOnInputChar(int inputChar, int (*inputListener)())
         std::cout << "tab" << std::endl;
         break;
     case 27:
+        std::cout << "escape" << std::endl;
         // escape
-        actOnEscapeSequence(inputListener);
+        // actOnEscapeSequence(inputListener);
         break;
     default:
         break;
