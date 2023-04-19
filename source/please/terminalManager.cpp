@@ -12,6 +12,7 @@ TerminalManager::TerminalManager()
 {
 };
 
+
 void TerminalManager::start()
 {
     this->init();
@@ -19,11 +20,13 @@ void TerminalManager::start()
     
 };
 
+
 void TerminalManager::init()
 {
     pathLogic::initPath();
     terminalLogic::initTerminal();
 };
+
 
 void TerminalManager::listen()
 {
@@ -31,9 +34,12 @@ void TerminalManager::listen()
     int inputCharacter;
 
 
+    inputLogic::InputAction inputAction = inputLogic::InputAction(*this);
+
     std::cout << std::filesystem::current_path().string() << " > ";
+    // todo need to know when to write the path again
     while ((inputCharacter = this->inputListener()) != EOF) {
-        inputLogic::actOnInputChar(inputCharacter);
+        inputAction.actOnInputChar(inputCharacter);
         continue;
         
         std::cout << inputCharacter << std::endl;
@@ -47,9 +53,11 @@ void TerminalManager::listen()
     };
 
     std::cout << wholeInputText << std::endl;
-}
+};
+
 
 int TerminalManager::inputListener()
 {
-    return terminalLogic::getCharacterInputListener()();
+    int (*inputListenerFromFactory)() = terminalLogic::getCharacterInputListener();
+    return inputListenerFromFactory();
 };

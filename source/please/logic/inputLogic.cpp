@@ -1,15 +1,24 @@
 #include <iostream>
 
 #include "inputLogic.h"
+#include "../terminalManager.h"
 
 
-void actOnEscapeSequence(int (*inputListener)()) {
-    int secondInput = inputListener();
+inputLogic::InputAction::InputAction(TerminalManager terminalManager)
+{
+    this->terminalManager = terminalManager;
+};
+
+
+void inputLogic::InputAction::actOnEscapeSequence()
+{
+    int secondInput = this->terminalManager.inputListener();
     if (secondInput != 91) {
+        this->actOnInputChar(secondInput);
         return;
     };
 
-    switch (inputListener())
+    switch (this->terminalManager.inputListener())
     {
     case 65:
         std::cout << "up" << std::endl;
@@ -18,12 +27,15 @@ void actOnEscapeSequence(int (*inputListener)()) {
         std::cout << "down" << std::endl;
         break;
     default:
+        this->actOnInputChar(secondInput);
         break;
-    }
-}
+    };
+};
 
 
-void inputLogic::actOnInputChar(int inputChar)
+
+
+void inputLogic::InputAction::actOnInputChar(int inputChar)
 {
     switch (inputChar)
     {
@@ -38,9 +50,9 @@ void inputLogic::actOnInputChar(int inputChar)
     case 27:
         std::cout << "escape" << std::endl;
         // escape
-        // actOnEscapeSequence(inputListener);
+        actOnEscapeSequence();
         break;
     default:
         break;
-    }
+    };
 };

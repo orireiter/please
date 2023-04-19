@@ -1,5 +1,17 @@
 #pragma once
 
+#include "../terminalManager.h"
+
 namespace inputLogic {
-    void actOnInputChar(int inputChar);
-}
+    class InputAction
+    {
+        private:
+            TerminalManager terminalManager;
+
+            void actOnEscapeSequence();
+
+        public:
+            InputAction(TerminalManager terminalManager);
+            void actOnInputChar(int inputChar);
+    };
+};

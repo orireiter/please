@@ -7,9 +7,9 @@ public:
   TerminalManager();
   void start();
 
+  int inputListener();
+
 private: 
   void init();
   void listen();
-
-  int inputListener();
 };
