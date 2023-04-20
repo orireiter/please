@@ -33,6 +33,13 @@ void inputLogic::InputAction::actOnEscapeSequence()
 };
 
 
+void inputLogic::InputAction::actOnDeleteSequence()
+{
+    this->terminalManager.popLastCharacterInCurrentInputString();
+    std::cout << '\b';
+    std::cout << " ";
+    std::cout << '\b';
+};
 
 
 void inputLogic::InputAction::actOnInputChar(int inputChar)
@@ -40,7 +47,7 @@ void inputLogic::InputAction::actOnInputChar(int inputChar)
     switch (inputChar)
     {
     case 10:
-        std::cout << "enter" << std::endl;
+        std::cout << std::endl << "will execute: " << this->terminalManager.getCurrentInputString() << std::endl;
         // run operation for whole input
         break;
     case 9:
@@ -50,9 +57,16 @@ void inputLogic::InputAction::actOnInputChar(int inputChar)
     case 27:
         std::cout << "escape" << std::endl;
         // escape
-        actOnEscapeSequence();
+        this->actOnEscapeSequence();
+        break;
+    case 127:
+        this->actOnDeleteSequence();
         break;
     default:
+        char asChar = static_cast<char>(inputChar);
+        this->terminalManager.appendCharactertoCurrentInputString(asChar);
+
+        std::cout << asChar;
         break;
     };
 };

@@ -10,6 +10,7 @@
 
 TerminalManager::TerminalManager()
 {
+    this->currentInputString = std::string();
 };
 
 
@@ -17,7 +18,6 @@ void TerminalManager::start()
 {
     this->init();
     this->listen();
-    
 };
 
 
@@ -30,9 +30,7 @@ void TerminalManager::init()
 
 void TerminalManager::listen()
 {
-    std::string wholeInputText;
     int inputCharacter;
-
 
     inputLogic::InputAction inputAction = inputLogic::InputAction(*this);
 
@@ -40,19 +38,7 @@ void TerminalManager::listen()
     // todo need to know when to write the path again
     while ((inputCharacter = this->inputListener()) != EOF) {
         inputAction.actOnInputChar(inputCharacter);
-        continue;
-        
-        std::cout << inputCharacter << std::endl;
-        if (inputCharacter == '\t') {
-            break;
-        }
-        
-        char asChar = static_cast<char>(inputCharacter);
-        wholeInputText.push_back(asChar);
-        std::cout << asChar;
     };
-
-    std::cout << wholeInputText << std::endl;
 };
 
 
@@ -60,4 +46,20 @@ int TerminalManager::inputListener()
 {
     int (*inputListenerFromFactory)() = terminalLogic::getCharacterInputListener();
     return inputListenerFromFactory();
+};
+
+
+void TerminalManager::appendCharactertoCurrentInputString(char character)
+{
+    this->currentInputString.push_back(character);
+};
+
+void TerminalManager::popLastCharacterInCurrentInputString()
+{
+    this->currentInputString.pop_back();
+};
+
+std::string TerminalManager::getCurrentInputString()
+{
+    return this->currentInputString;
 };
