@@ -4,10 +4,8 @@
 
 #include "please/terminalManager.h"
 
-
-int main()
-{   
-    TerminalManager pleaseTerminal = TerminalManager();
-    pleaseTerminal.start();
-    return 0;
+int main() {
+  TerminalManager pleaseTerminal = TerminalManager();
+  pleaseTerminal.start();
+  return 0;
 };

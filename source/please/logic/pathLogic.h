@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace pathLogic {
-    void initPath();
+void initPath();
 };

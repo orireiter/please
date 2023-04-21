@@ -2,22 +2,19 @@
 
 #include <string>
 
-
-class TerminalManager
-{
-public:
+class TerminalManager {
+ public:
   TerminalManager();
   void start();
 
   int inputListener();
-  
+
   void appendCharactertoCurrentInputString(char character);
   void popLastCharacterInCurrentInputString();
   void clearCurrentInputString();
   std::string getCurrentInputString();
 
-
-private: 
+ private:
   std::string currentInputString;
 
   void init();
