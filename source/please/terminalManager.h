@@ -13,6 +13,7 @@ public:
   
   void appendCharactertoCurrentInputString(char character);
   void popLastCharacterInCurrentInputString();
+  void clearCurrentInputString();
   std::string getCurrentInputString();
 
 

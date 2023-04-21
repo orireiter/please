@@ -59,6 +59,10 @@ void TerminalManager::popLastCharacterInCurrentInputString()
     this->currentInputString.pop_back();
 };
 
+void TerminalManager::clearCurrentInputString(){
+    this->currentInputString.clear();
+};
+
 std::string TerminalManager::getCurrentInputString()
 {
     return this->currentInputString;

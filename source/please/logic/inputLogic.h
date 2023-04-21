@@ -10,6 +10,7 @@ namespace inputLogic {
 
             void actOnEscapeSequence();
             void actOnDeleteSequence();
+            void actOnEnterSequence();
 
         public:
             InputAction(TerminalManager terminalManager);

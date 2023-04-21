@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdio>
 
 #include "inputLogic.h"
 #include "../terminalManager.h"
@@ -42,21 +43,50 @@ void inputLogic::InputAction::actOnDeleteSequence()
 };
 
 
+void inputLogic::InputAction::actOnEnterSequence()
+{
+    std::cout << std::endl;
+    try {
+        const int buffer_size = 256;
+        char buffer[buffer_size];
+
+        // Open the command as a pipe and check for errors
+        FILE* pipe = popen(this->terminalManager.getCurrentInputString().c_str(), "r");
+        if (!pipe) {
+            std::cerr << "Error: could not open pipe for command." << std::endl;
+            return;
+        }
+
+        // Read the command output in chunks of buffer_size bytes and append them to the result string
+        std::vector<char> result;
+        while (fgets(buffer, buffer_size, pipe) != nullptr) {
+            result.insert(result.end(), buffer, buffer + std::strlen(buffer));
+        };
+
+        pclose(pipe);
+        std::cout << result.data();
+
+        this->terminalManager.clearCurrentInputString();
+    }
+    catch (const std::exception) {
+        std::cerr << "Error: could not open pipe for command." << std::endl;
+        std::cout << this->terminalManager.getCurrentInputString();
+    }
+    
+};
+
 void inputLogic::InputAction::actOnInputChar(int inputChar)
 {
     switch (inputChar)
     {
     case 10:
-        std::cout << std::endl << "will execute: " << this->terminalManager.getCurrentInputString() << std::endl;
-        // run operation for whole input
+        this->actOnEnterSequence();
         break;
     case 9:
         // run completion for input
         std::cout << "tab" << std::endl;
         break;
     case 27:
-        std::cout << "escape" << std::endl;
-        // escape
         this->actOnEscapeSequence();
         break;
     case 127:
