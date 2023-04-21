@@ -1,8 +1,35 @@
 #include <iostream>
 #include <cstdio>
+#include <sstream>
 
 #include "inputLogic.h"
 #include "../terminalManager.h"
+#include "../exceptions/exceptions.h"
+
+
+std::string runCommand(std::string commandString) {
+    const int buffer_size = 256;
+    char buffer[buffer_size];
+
+    FILE* pipe = popen(commandString.c_str(), "r");
+    if (!pipe) {
+        std::cerr << "Error: could not open pipe for command." << std::endl;
+        throw PleaseExceptions::PleaseException(PleaseExceptions::PleaseExceptionsEnum::NO_PIPE_FROM_POPEN);
+    };
+
+    std::vector<char> result;
+    while (fgets(buffer, buffer_size, pipe) != nullptr) {
+        result.insert(result.end(), buffer, buffer + std::strlen(buffer));
+    };
+
+    pclose(pipe);
+
+    if (result.empty()) {
+        throw PleaseExceptions::PleaseException(PleaseExceptions::PleaseExceptionsEnum::BAD_COMMAND_INPUT);
+    };
+    
+    return result.data();
+};
 
 
 inputLogic::InputAction::InputAction(TerminalManager terminalManager)
@@ -46,33 +73,17 @@ void inputLogic::InputAction::actOnDeleteSequence()
 void inputLogic::InputAction::actOnEnterSequence()
 {
     std::cout << std::endl;
-    try {
-        const int buffer_size = 256;
-        char buffer[buffer_size];
 
-        // Open the command as a pipe and check for errors
-        FILE* pipe = popen(this->terminalManager.getCurrentInputString().c_str(), "r");
-        if (!pipe) {
-            std::cerr << "Error: could not open pipe for command." << std::endl;
-            return;
-        }
-
-        // Read the command output in chunks of buffer_size bytes and append them to the result string
-        std::vector<char> result;
-        while (fgets(buffer, buffer_size, pipe) != nullptr) {
-            result.insert(result.end(), buffer, buffer + std::strlen(buffer));
-        };
-
-        pclose(pipe);
-        std::cout << result.data();
-
+    try 
+    {
+        std::string commandOutput = runCommand(this->terminalManager.getCurrentInputString());
+        std::cout << commandOutput.data();
         this->terminalManager.clearCurrentInputString();
-    }
-    catch (const std::exception) {
-        std::cerr << "Error: could not open pipe for command." << std::endl;
-        std::cout << this->terminalManager.getCurrentInputString();
-    }
-    
+    } 
+    catch (const PleaseExceptions::PleaseException& e) 
+    {
+        // rewrite path (and current command?)
+    };
 };
 
 void inputLogic::InputAction::actOnInputChar(int inputChar)
