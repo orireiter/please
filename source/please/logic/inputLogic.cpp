@@ -58,6 +58,10 @@ void inputLogic::InputAction::actOnEscapeSequence() {
 };
 
 void inputLogic::InputAction::actOnDeleteSequence() {
+  if (this->terminalManager.getCurrentInputString().empty()) {
+    return;
+  };
+
   this->terminalManager.popLastCharacterInCurrentInputString();
   std::cout << '\b';
   std::cout << " ";
@@ -75,6 +79,7 @@ void inputLogic::InputAction::actOnEnterSequence() {
   } catch (const PleaseExceptions::PleaseException& e) {
     // rewrite path (and current command?)
   };
+  std::cout << this->terminalManager.getCompleteCurrentActiveLine();
 };
 
 void inputLogic::InputAction::actOnInputChar(int inputChar) {

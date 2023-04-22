@@ -26,8 +26,7 @@ void TerminalManager::listen() {
 
   inputLogic::InputAction inputAction = inputLogic::InputAction(*this);
 
-  std::cout << std::filesystem::current_path().string() << " > ";
-  // todo need to know when to write the path again
+  std::cout << this->getCompleteCurrentActiveLine();
   while ((inputCharacter = this->inputListener()) != EOF) {
     inputAction.actOnInputChar(inputCharacter);
   };
@@ -53,4 +52,27 @@ void TerminalManager::clearCurrentInputString() {
 
 std::string TerminalManager::getCurrentInputString() {
   return this->currentInputString;
+};
+
+std::string TerminalManager::getCurrentPathDetailString() {
+  std::string fullPath = "";
+
+  std::string path =  std::filesystem::current_path().string();
+
+  fullPath += path;
+  
+  return fullPath + " \u279C ";
+};
+
+std::string TerminalManager::getCompleteCurrentActiveLine()
+{
+  std::string activeLine;
+  activeLine += this->getCurrentPathDetailString();
+  
+  std::string currentInput = this->getCurrentInputString();
+  if (currentInput.empty() == false) {
+      activeLine += currentInput;
+  };
+  
+  return activeLine;
 };

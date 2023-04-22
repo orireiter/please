@@ -13,10 +13,12 @@ class TerminalManager {
   void popLastCharacterInCurrentInputString();
   void clearCurrentInputString();
   std::string getCurrentInputString();
+  std::string getCompleteCurrentActiveLine();
 
  private:
   std::string currentInputString;
 
   void init();
   void listen();
+  std::string getCurrentPathDetailString();
 };
