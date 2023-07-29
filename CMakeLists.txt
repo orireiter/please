@@ -15,7 +15,7 @@ file(GLOB_RECURSE please_SRC
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
-# make posix support "\u279C" syntax
+# make posix support "\u279C" unicode syntax
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
