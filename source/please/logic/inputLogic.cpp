@@ -7,6 +7,13 @@
 #include "../exceptions/exceptions.h"
 #include "../terminalManager.h"
 
+#ifdef _WIN32
+  #include <vector>
+  #define popen _popen
+  #define pclose _pclose
+#endif
+
+
 std::string runCommand(std::string commandString) {
   const int buffer_size = 256;
   char buffer[buffer_size];
