@@ -70,6 +70,9 @@ void inputLogic::InputAction::actOnEscapeSequence() {
     case 66:
       std::cout << "down" << std::endl;
       break;
+    case 67:
+      std::cout << "right" << std::endl;
+      break;
     case 68:
       this->actOnLeftArrow();
     default:
