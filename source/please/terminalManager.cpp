@@ -9,6 +9,7 @@
 
 TerminalManager::TerminalManager() {
   this->isExitAttempt = false;
+  this->currentIndexInInputString = 0;
   this->currentInputString = std::string();
 };
 
@@ -40,15 +41,26 @@ int TerminalManager::inputListener() {
 };
 
 void TerminalManager::appendCharactertoCurrentInputString(char character) {
-  this->currentInputString.push_back(character);
+  this->currentInputString.insert(this->currentIndexInInputString, 1, character);
+  this->currentIndexInInputString += 1;
 };
 
-void TerminalManager::popLastCharacterInCurrentInputString() {
-  this->currentInputString.pop_back();
+void TerminalManager::popOneCharacterBeforeIndexInInput() {
+  this->currentInputString.erase(this->currentIndexInInputString-1, 1);
+  this->moveCurrentIndexXStepsBack(1);
+};
+
+void TerminalManager::moveCurrentIndexXStepsBack(int x){
+  this->currentIndexInInputString -= x;
+};
+
+void TerminalManager::resetCurrentIndexToEnd() {
+  this->currentIndexInInputString = this->currentInputString.size();
 };
 
 void TerminalManager::clearCurrentInputString() {
   this->currentInputString.clear();
+  this->currentIndexInInputString = 0;
 };
 
 void TerminalManager::setIsExitAttempt(bool isExit){
@@ -81,4 +93,14 @@ std::string TerminalManager::getCompleteCurrentActiveLine()
   };
   
   return activeLine;
+};
+
+InputSuffix TerminalManager::getInputSuffix() {
+  std::string inputAfterCursor = this->currentInputString.substr(this->currentIndexInInputString);
+
+  int backspacesAmount = this->currentInputString.size() - this->currentIndexInInputString;
+  std::string backspaces(backspacesAmount, '\b');
+
+  InputSuffix inputSuffix{.text=inputAfterCursor, .backspaces=backspaces};
+  return inputSuffix;
 };

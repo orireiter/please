@@ -34,7 +34,7 @@ void inputLogic::InputAction::actOnChar224Sequence() {
       std::cout << "up" << std::endl;
       break;
     case 75:
-      std::cout << "left" << std::endl;
+      this->actOnLeftArrow();
       break;
     case 77:
       std::cout << "right" << std::endl;
@@ -70,6 +70,8 @@ void inputLogic::InputAction::actOnEscapeSequence() {
     case 66:
       std::cout << "down" << std::endl;
       break;
+    case 68:
+      this->actOnLeftArrow();
     default:
       this->actOnInputChar(secondInput);
       break;
@@ -119,14 +121,15 @@ inputLogic::InputAction::InputAction(TerminalManager* terminalManagerPtr) {
 };
 
 void inputLogic::InputAction::actOnDeleteBackspaceSequence() {
-  if (this->terminalManagerPtr->getCurrentInputString().empty()) {
+  if (this->terminalManagerPtr->currentIndexInInputString == 0 || this->terminalManagerPtr->getCurrentInputString().empty()) {
     return;
   };
 
-  this->terminalManagerPtr->popLastCharacterInCurrentInputString();
+  this->terminalManagerPtr->popOneCharacterBeforeIndexInInput();
   std::cout << '\b';
-  std::cout << " ";
-  std::cout << '\b';
+
+  InputSuffix suffix = this->terminalManagerPtr->getInputSuffix();
+  std::cout << suffix.text << " \b" << suffix.backspaces;
 };
 
 void inputLogic::InputAction::actOnEnterSequence() {
@@ -140,11 +143,11 @@ void inputLogic::InputAction::actOnEnterSequence() {
   };
 
   try {
-    std::string commandOutput =
-        runCommand(currentInput);
+    std::string commandOutput = runCommand(currentInput);
     std::cout << commandOutput;
     this->terminalManagerPtr->clearCurrentInputString();
   } catch (const PleaseExceptions::PleaseException& e) {
+    this->terminalManagerPtr->resetCurrentIndexToEnd();
     // todo rewrite path (and current command?) + in case of posix we need to show this error, mac shows it even when there's nothing here
   };
   std::cout << this->terminalManagerPtr->getCompleteCurrentActiveLine();
@@ -153,7 +156,18 @@ void inputLogic::InputAction::actOnEnterSequence() {
 void inputLogic::InputAction::actOnNormalKeyPress(int inputCharAsInt){
   char asChar = static_cast<char>(inputCharAsInt);
   this->terminalManagerPtr->appendCharactertoCurrentInputString(asChar);
-  std::cout << asChar;
+
+  InputSuffix suffix = this->terminalManagerPtr->getInputSuffix();
+  std::cout << asChar << suffix.text << suffix.backspaces;
+};
+
+void inputLogic::InputAction::actOnLeftArrow(){
+  if (this->terminalManagerPtr->currentIndexInInputString == 0 || this->terminalManagerPtr->getCurrentInputString().empty()) {
+    return;
+  };
+
+  std::cout << '\b';
+  this->terminalManagerPtr->moveCurrentIndexXStepsBack(1);
 };
 
 void inputLogic::InputAction::actOnInputChar(int inputChar) {
