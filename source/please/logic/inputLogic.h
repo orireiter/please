@@ -11,6 +11,7 @@ class InputAction {
   void actOnDeleteBackspaceSequence();
   void actOnEnterSequence();
   void actOnChar224Sequence();
+  void actOnNormalKeyPress(int inputCharAsInt);
 
  public:
   InputAction(TerminalManager terminalManager);

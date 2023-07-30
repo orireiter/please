@@ -52,7 +52,8 @@ enum class KeyboardButtonEnum {
   ENTER = 10,
   TAB = 9,
   ESCAPE = 27,
-  DELETE_BACKSPACE = 127
+  DELETE_BACKSPACE = 127,
+  CHAR_224 = 224
 };
 
 void inputLogic::InputAction::actOnEscapeSequence() {
@@ -74,6 +75,12 @@ void inputLogic::InputAction::actOnEscapeSequence() {
       break;
   };
 };
+
+void inputLogic::InputAction::actOnChar224Sequence() {
+  this->actOnNormalKeyPress(224);
+  return;
+};
+
 #endif
 
 std::string runCommand(std::string commandString) {
@@ -136,6 +143,12 @@ void inputLogic::InputAction::actOnEnterSequence() {
   std::cout << this->terminalManager.getCompleteCurrentActiveLine();
 };
 
+void inputLogic::InputAction::actOnNormalKeyPress(int inputCharAsInt){
+  char asChar = static_cast<char>(inputCharAsInt);
+  this->terminalManager.appendCharactertoCurrentInputString(asChar);
+  std::cout << asChar;
+};
+
 void inputLogic::InputAction::actOnInputChar(int inputChar) {
   KeyboardButtonEnum keyboardButton{inputChar};
   switch (keyboardButton) {
@@ -156,10 +169,7 @@ void inputLogic::InputAction::actOnInputChar(int inputChar) {
       this->actOnChar224Sequence();
       break;
     default:
-      char asChar = static_cast<char>(inputChar);
-      this->terminalManager.appendCharactertoCurrentInputString(asChar);
-
-      std::cout << asChar;
+      this->actOnNormalKeyPress(inputChar);
       break;
   };
 };
