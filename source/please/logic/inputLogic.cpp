@@ -134,6 +134,10 @@ void inputLogic::InputAction::actOnEnterSequence() {
 
   std::string currentInput = this->terminalManagerPtr->getCurrentInputString();
 
+  if (this->terminalManagerPtr->exitKeywords.contains(currentInput)) {
+    this->terminalManagerPtr->setIsExitAttempt(true);
+    return;
+  };
 
   try {
     std::string commandOutput =
@@ -141,7 +145,7 @@ void inputLogic::InputAction::actOnEnterSequence() {
     std::cout << commandOutput;
     this->terminalManagerPtr->clearCurrentInputString();
   } catch (const PleaseExceptions::PleaseException& e) {
-    // todo rewrite path (and current command?)
+    // todo rewrite path (and current command?) + in case of posix we need to show this error, mac shows it even when there's nothing here
   };
   std::cout << this->terminalManagerPtr->getCompleteCurrentActiveLine();
 };
