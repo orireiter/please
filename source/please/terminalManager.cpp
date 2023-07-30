@@ -33,8 +33,8 @@ void TerminalManager::listen() {
 };
 
 int TerminalManager::inputListener() {
-  int (*inputListenerFromFactory)() =
-      terminalLogic::getCharacterInputListener();
+  int (*inputListenerFromFactory)();
+  inputListenerFromFactory = terminalLogic::getCharacterInputListener();
   return inputListenerFromFactory();
 };
 
@@ -57,22 +57,21 @@ std::string TerminalManager::getCurrentInputString() {
 std::string TerminalManager::getCurrentPathDetailString() {
   std::string fullPath = "";
 
-  std::string path =  std::filesystem::current_path().string();
+  std::string path = std::filesystem::current_path().string();
 
   fullPath += path;
-  
+
   return fullPath + " \u279C ";
 };
 
-std::string TerminalManager::getCompleteCurrentActiveLine()
-{
+std::string TerminalManager::getCompleteCurrentActiveLine() {
   std::string activeLine;
   activeLine += this->getCurrentPathDetailString();
-  
+
   std::string currentInput = this->getCurrentInputString();
   if (currentInput.empty() == false) {
-      activeLine += currentInput;
+    activeLine += currentInput;
   };
-  
+
   return activeLine;
 };

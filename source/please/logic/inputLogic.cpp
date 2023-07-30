@@ -2,11 +2,12 @@
 
 #include <cstdio>
 #include <iostream>
-#include <sstream>
 
 #include "../exceptions/exceptions.h"
 #include "../terminalManager.h"
 
+// todo make this function a generator so i could then print each line
+// individually
 std::string runCommand(std::string commandString) {
   const int buffer_size = 256;
   char buffer[buffer_size];
@@ -33,8 +34,32 @@ std::string runCommand(std::string commandString) {
   return result.data();
 };
 
+void inputLogic::CommandHistory::getCommandHistory() {
+  try {
+    std::string historyCommandString = "fc -l -1";
+    std::string commandHistory = runCommand(historyCommandString);
+    std::cout << commandHistory;
+  } catch (const PleaseExceptions::PleaseException& e) {
+    std::cout << e.what();
+  };
+};
+
+inputLogic::CommandHistory::CommandHistory(){};
+
+std::string inputLogic::CommandHistory::getLastCommandStartingWithPrefix(
+    std::string commandPrefix) {
+  this->getCommandHistory();
+  return "";
+};
+
+std::string inputLogic::CommandHistory::getNextCommandStartingWithPrefix(
+    std::string commandPrefix) {
+  return "";
+};
+
 inputLogic::InputAction::InputAction(TerminalManager terminalManager) {
   this->terminalManager = terminalManager;
+  this->commandHistory = CommandHistory();
 };
 
 void inputLogic::InputAction::actOnEscapeSequence() {
@@ -43,6 +68,8 @@ void inputLogic::InputAction::actOnEscapeSequence() {
     this->actOnInputChar(secondInput);
     return;
   };
+
+  this->commandHistory.getLastCommandStartingWithPrefix("");
 
   switch (this->terminalManager.inputListener()) {
     case 65:
