@@ -8,8 +8,10 @@ class InputAction {
   TerminalManager terminalManager;
 
   void actOnEscapeSequence();
-  void actOnDeleteSequence();
+  void actOnDeleteBackspaceSequence();
   void actOnEnterSequence();
+  void actOnChar224Sequence();
+  void actOnNormalKeyPress(int inputCharAsInt);
 
  public:
   InputAction(TerminalManager terminalManager);

@@ -13,6 +13,75 @@
   #define pclose _pclose
 #endif
 
+#ifdef _WIN32
+enum class KeyboardButtonEnum {
+  ENTER = 13,
+  TAB = 9,
+  ESCAPE = 27,
+  DELETE_BACKSPACE = 8,
+  CHAR_224 = 224
+};
+
+void inputLogic::InputAction::actOnEscapeSequence() {
+  // todo implement if needed
+  return;
+};
+
+void inputLogic::InputAction::actOnChar224Sequence() {
+  int secondInput = this->terminalManager.inputListener();
+  switch (secondInput) {
+    case 72:
+      std::cout << "up" << std::endl;
+      break;
+    case 75:
+      std::cout << "left" << std::endl;
+      break;
+    case 77:
+      std::cout << "right" << std::endl;
+      break;
+    case 80:
+      std::cout << "down" << std::endl;
+      break;
+    default:
+      this->actOnInputChar(secondInput);
+      break;
+  };
+};
+#else
+enum class KeyboardButtonEnum {
+  ENTER = 10,
+  TAB = 9,
+  ESCAPE = 27,
+  DELETE_BACKSPACE = 127,
+  CHAR_224 = 224
+};
+
+void inputLogic::InputAction::actOnEscapeSequence() {
+  int secondInput = this->terminalManager.inputListener();
+  if (secondInput != 91) {
+    this->actOnInputChar(secondInput);
+    return;
+  };
+
+  switch (this->terminalManager.inputListener()) {
+    case 65:
+      std::cout << "up" << std::endl;
+      break;
+    case 66:
+      std::cout << "down" << std::endl;
+      break;
+    default:
+      this->actOnInputChar(secondInput);
+      break;
+  };
+};
+
+void inputLogic::InputAction::actOnChar224Sequence() {
+  this->actOnNormalKeyPress(224);
+  return;
+};
+
+#endif
 
 std::string runCommand(std::string commandString) {
   const int buffer_size = 256;
@@ -37,34 +106,19 @@ std::string runCommand(std::string commandString) {
         PleaseExceptions::PleaseExceptionsEnum::BAD_COMMAND_INPUT);
   };
 
-  return result.data();
+  if (result.back() != '\n') {
+    result.insert(result.end(), '\n');
+  };
+
+  std::string asString(result.begin(), result.end());
+  return asString;
 };
 
 inputLogic::InputAction::InputAction(TerminalManager terminalManager) {
   this->terminalManager = terminalManager;
 };
 
-void inputLogic::InputAction::actOnEscapeSequence() {
-  int secondInput = this->terminalManager.inputListener();
-  if (secondInput != 91) {
-    this->actOnInputChar(secondInput);
-    return;
-  };
-
-  switch (this->terminalManager.inputListener()) {
-    case 65:
-      std::cout << "up" << std::endl;
-      break;
-    case 66:
-      std::cout << "down" << std::endl;
-      break;
-    default:
-      this->actOnInputChar(secondInput);
-      break;
-  };
-};
-
-void inputLogic::InputAction::actOnDeleteSequence() {
+void inputLogic::InputAction::actOnDeleteBackspaceSequence() {
   if (this->terminalManager.getCurrentInputString().empty()) {
     return;
   };
@@ -81,34 +135,41 @@ void inputLogic::InputAction::actOnEnterSequence() {
   try {
     std::string commandOutput =
         runCommand(this->terminalManager.getCurrentInputString());
-    std::cout << commandOutput.data();
+    std::cout << commandOutput;
     this->terminalManager.clearCurrentInputString();
   } catch (const PleaseExceptions::PleaseException& e) {
-    // rewrite path (and current command?)
+    // todo rewrite path (and current command?)
   };
   std::cout << this->terminalManager.getCompleteCurrentActiveLine();
 };
 
+void inputLogic::InputAction::actOnNormalKeyPress(int inputCharAsInt){
+  char asChar = static_cast<char>(inputCharAsInt);
+  this->terminalManager.appendCharactertoCurrentInputString(asChar);
+  std::cout << asChar;
+};
+
 void inputLogic::InputAction::actOnInputChar(int inputChar) {
-  switch (inputChar) {
-    case 10:
+  KeyboardButtonEnum keyboardButton{inputChar};
+  switch (keyboardButton) {
+    case KeyboardButtonEnum::ENTER:
       this->actOnEnterSequence();
       break;
-    case 9:
+    case KeyboardButtonEnum::TAB:
       // run completion for input
       std::cout << "tab" << std::endl;
       break;
-    case 27:
+    case KeyboardButtonEnum::ESCAPE:
       this->actOnEscapeSequence();
       break;
-    case 127:
-      this->actOnDeleteSequence();
+    case KeyboardButtonEnum::DELETE_BACKSPACE:
+      this->actOnDeleteBackspaceSequence();
+      break;
+    case KeyboardButtonEnum::CHAR_224:
+      this->actOnChar224Sequence();
       break;
     default:
-      char asChar = static_cast<char>(inputChar);
-      this->terminalManager.appendCharactertoCurrentInputString(asChar);
-
-      std::cout << asChar;
+      this->actOnNormalKeyPress(inputChar);
       break;
   };
 };
