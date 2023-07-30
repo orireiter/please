@@ -35,3 +35,4 @@ Left To Dos:
 9. allow using left/right arrows to move cursor in the text written.
     - simple left/right.
     - add stuff like (alt/ctrl/shift) + arrows.
+10. support unix interactive shell commands and any bidirectional commmands (history, ping, etc...).
