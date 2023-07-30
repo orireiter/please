@@ -57,13 +57,13 @@ enum class KeyboardButtonEnum {
 };
 
 void inputLogic::InputAction::actOnEscapeSequence() {
-  int secondInput = this->terminalManager->inputListener();
+  int secondInput = this->terminalManagerPtr->inputListener();
   if (secondInput != 91) {
     this->actOnInputChar(secondInput);
     return;
   };
 
-  switch (this->terminalManager->inputListener()) {
+  switch (this->terminalManagerPtr->inputListener()) {
     case 65:
       std::cout << "up" << std::endl;
       break;
