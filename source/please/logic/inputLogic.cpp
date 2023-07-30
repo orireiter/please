@@ -129,10 +129,9 @@ void inputLogic::InputAction::actOnDeleteBackspaceSequence() {
   };
 
   this->terminalManagerPtr->popOneCharacterBeforeIndexInInput();
-  std::cout << '\b';
 
   InputSuffix suffix = this->terminalManagerPtr->getInputSuffix();
-  std::cout << suffix.text << " \b" << suffix.backspaces;
+  std::cout << '\b' << suffix.text << " \b" << suffix.backspaces;
 };
 
 void inputLogic::InputAction::actOnEnterSequence() {
