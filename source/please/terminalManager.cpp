@@ -24,7 +24,7 @@ void TerminalManager::init() {
 void TerminalManager::listen() {
   int inputCharacter;
 
-  inputLogic::InputAction inputAction = inputLogic::InputAction(*this);
+  inputLogic::InputAction inputAction = inputLogic::InputAction(this);
 
   std::cout << this->getCompleteCurrentActiveLine();
   while ((inputCharacter = this->inputListener()) != EOF) {

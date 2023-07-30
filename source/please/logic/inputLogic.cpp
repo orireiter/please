@@ -28,7 +28,7 @@ void inputLogic::InputAction::actOnEscapeSequence() {
 };
 
 void inputLogic::InputAction::actOnChar224Sequence() {
-  int secondInput = this->terminalManager.inputListener();
+  int secondInput = this->terminalManagerPtr->inputListener();
   switch (secondInput) {
     case 72:
       std::cout << "up" << std::endl;
@@ -114,16 +114,16 @@ std::string runCommand(std::string commandString) {
   return asString;
 };
 
-inputLogic::InputAction::InputAction(TerminalManager terminalManager) {
-  this->terminalManager = terminalManager;
+inputLogic::InputAction::InputAction(TerminalManager* terminalManagerPtr) {
+  this->terminalManagerPtr = terminalManagerPtr;
 };
 
 void inputLogic::InputAction::actOnDeleteBackspaceSequence() {
-  if (this->terminalManager.getCurrentInputString().empty()) {
+  if (this->terminalManagerPtr->getCurrentInputString().empty()) {
     return;
   };
 
-  this->terminalManager.popLastCharacterInCurrentInputString();
+  this->terminalManagerPtr->popLastCharacterInCurrentInputString();
   std::cout << '\b';
   std::cout << " ";
   std::cout << '\b';
@@ -132,20 +132,23 @@ void inputLogic::InputAction::actOnDeleteBackspaceSequence() {
 void inputLogic::InputAction::actOnEnterSequence() {
   std::cout << std::endl;
 
+  std::string currentInput = this->terminalManagerPtr->getCurrentInputString();
+
+
   try {
     std::string commandOutput =
-        runCommand(this->terminalManager.getCurrentInputString());
+        runCommand(currentInput);
     std::cout << commandOutput;
-    this->terminalManager.clearCurrentInputString();
+    this->terminalManagerPtr->clearCurrentInputString();
   } catch (const PleaseExceptions::PleaseException& e) {
     // todo rewrite path (and current command?)
   };
-  std::cout << this->terminalManager.getCompleteCurrentActiveLine();
+  std::cout << this->terminalManagerPtr->getCompleteCurrentActiveLine();
 };
 
 void inputLogic::InputAction::actOnNormalKeyPress(int inputCharAsInt){
   char asChar = static_cast<char>(inputCharAsInt);
-  this->terminalManager.appendCharactertoCurrentInputString(asChar);
+  this->terminalManagerPtr->appendCharactertoCurrentInputString(asChar);
   std::cout << asChar;
 };
 
@@ -156,7 +159,7 @@ void inputLogic::InputAction::actOnInputChar(int inputChar) {
       this->actOnEnterSequence();
       break;
     case KeyboardButtonEnum::TAB:
-      // run completion for input
+      // todo run completion for input
       std::cout << "tab" << std::endl;
       break;
     case KeyboardButtonEnum::ESCAPE:

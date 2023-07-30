@@ -5,7 +5,7 @@
 namespace inputLogic {
 class InputAction {
  private:
-  TerminalManager terminalManager;
+  TerminalManager* terminalManagerPtr;
 
   void actOnEscapeSequence();
   void actOnDeleteBackspaceSequence();
@@ -14,7 +14,7 @@ class InputAction {
   void actOnNormalKeyPress(int inputCharAsInt);
 
  public:
-  InputAction(TerminalManager terminalManager);
+  InputAction(TerminalManager* terminalManagerPtr);
   void actOnInputChar(int inputChar);
 };
 };  // namespace inputLogic
