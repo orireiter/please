@@ -8,6 +8,7 @@
 #include "logic/terminalLogic.h"
 
 TerminalManager::TerminalManager() {
+  this->isExitAttempt = false;
   this->currentInputString = std::string();
 };
 
@@ -27,7 +28,7 @@ void TerminalManager::listen() {
   inputLogic::InputAction inputAction = inputLogic::InputAction(this);
 
   std::cout << this->getCompleteCurrentActiveLine();
-  while ((inputCharacter = this->inputListener()) != EOF) {
+  while (this->isExitAttempt == false && (inputCharacter = this->inputListener()) != EOF) {
     inputAction.actOnInputChar(inputCharacter);
   };
 };
@@ -48,6 +49,11 @@ void TerminalManager::popLastCharacterInCurrentInputString() {
 
 void TerminalManager::clearCurrentInputString() {
   this->currentInputString.clear();
+};
+
+void TerminalManager::setIsExitAttempt(bool isExit){
+  this->isExitAttempt = isExit;
+  return;
 };
 
 std::string TerminalManager::getCurrentInputString() {

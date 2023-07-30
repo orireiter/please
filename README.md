@@ -12,3 +12,4 @@ Left To Dos:
 5. support up/down arrow to browse through command history, while filtering by the input already given. for example if a user wrote "ech" the browse only through the command history with this prefix.
 6. add colors to make this better?
 7. allow adding configuration so users decide which features to use?
+8. allow using left/right arrows to move cursor in the text written, then add stuff like (alt/ctrl/shift) + arrows.

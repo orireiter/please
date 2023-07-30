@@ -134,6 +134,10 @@ void inputLogic::InputAction::actOnEnterSequence() {
 
   std::string currentInput = this->terminalManagerPtr->getCurrentInputString();
 
+  if (this->terminalManagerPtr->exitKeywords.contains(currentInput)) {
+    this->terminalManagerPtr->setIsExitAttempt(true);
+    return;
+  };
 
   try {
     std::string commandOutput =
