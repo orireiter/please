@@ -61,7 +61,7 @@ std::string TerminalManager::getCurrentPathDetailString() {
 
   fullPath += path;
   
-  return fullPath + " \u279C ";
+  return fullPath + " \u279C  ";
 };
 
 std::string TerminalManager::getCompleteCurrentActiveLine()

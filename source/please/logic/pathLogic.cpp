@@ -6,13 +6,13 @@
 
 std::optional<std::string> getHomePath() {
 #ifdef _WIN32
-  const char *homePathEnvName = "USERPROFILE";
+  char *homePath = nullptr;
+  size_t sz = 0;
+  _dupenv_s(&homePath, &sz, "USERPROFILE");
 #else
-  const char *homePathEnvName = "HOME";
+  const char *homePath = getenv("HOME");
 #endif
-
-  const char *homePath = getenv(homePathEnvName);
-  return (homePath) ? std::make_optional<std::string>(homePath) : std::nullopt;
+  return (homePath && homePath != nullptr) ? std::make_optional<std::string>(homePath) : std::nullopt;
 };
 
 std::string getInitPath() {

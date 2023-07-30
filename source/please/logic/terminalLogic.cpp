@@ -1,11 +1,20 @@
 #include "terminalLogic.h"
 
 #ifdef _WIN32
+#include <windows.h>
 #include <conio.h>
 
-void initTerminal() { clrscr(); };
+void makeTerminalSupportUTF8() {
+  int utf8CodePageIdentifier = 65001;
+  SetConsoleOutputCP(utf8CodePageIdentifier);
+};
 
-int (*getCharacterInputListener())() { return &getch; };
+void terminalLogic::initTerminal() { 
+  makeTerminalSupportUTF8();
+  system("cls"); 
+};
+
+int (*terminalLogic::getCharacterInputListener())() { return &_getch; };
 #else
 #include <stdio.h>
 #include <termios.h>
