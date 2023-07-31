@@ -75,6 +75,7 @@ void inputLogic::InputAction::actOnEscapeSequence() {
       break;
     case 68:
       this->actOnLeftArrow();
+      break;
     default:
       this->actOnInputChar(secondInput);
       break;
