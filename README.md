@@ -33,6 +33,6 @@ Left To Dos:
 7. add colors to make this better?
 8. allow adding configuration so users decide which features to use?
 9. allow using left/right arrows to move cursor in the text written.
-    - simple left/right.
+    - simple left/right.✅
     - add stuff like (alt/ctrl/shift) + arrows.
 10. support unix interactive shell commands and any bidirectional commmands (history, ping, etc...).
