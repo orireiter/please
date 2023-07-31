@@ -37,13 +37,12 @@ void inputLogic::InputAction::actOnChar224Sequence() {
       this->actOnLeftArrow();
       break;
     case 77:
-      this->actOnRightArrow();
+      std::cout << "right" << std::endl;
       break;
     case 80:
       std::cout << "down" << std::endl;
       break;
     default:
-      // todo do i need to also run for third input?
       this->actOnInputChar(secondInput);
       break;
   };
@@ -72,13 +71,12 @@ void inputLogic::InputAction::actOnEscapeSequence() {
       std::cout << "down" << std::endl;
       break;
     case 67:
-      this->actOnRightArrow();
+      std::cout << "right" << std::endl;
       break;
     case 68:
       this->actOnLeftArrow();
       break;
     default:
-      // todo do i need to also run for third input?
       this->actOnInputChar(secondInput);
       break;
   };
@@ -171,19 +169,8 @@ void inputLogic::InputAction::actOnLeftArrow(){
     return;
   };
 
-  this->terminalManagerPtr->moveCurrentIndexXStepsBack(1);
   std::cout << '\b';
-};
-
-void inputLogic::InputAction::actOnRightArrow(){
-  std::string currentInput = this->terminalManagerPtr->getCurrentInputString();
-  int currentIndex = this->terminalManagerPtr->currentIndexInInputString;
-  if (currentInput.empty() || currentIndex == currentInput.size()) {
-    return;
-  };
-
-  this->terminalManagerPtr->moveCurrentIndexXStepsBack(-1);
-  std::cout << currentInput.at(currentIndex);
+  this->terminalManagerPtr->moveCurrentIndexXStepsBack(1);
 };
 
 void inputLogic::InputAction::actOnInputChar(int inputChar) {
