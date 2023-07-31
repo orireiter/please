@@ -76,6 +76,7 @@ void inputLogic::InputAction::actOnEscapeSequence() {
       break;
     case 68:
       this->actOnLeftArrow();
+      break;
     default:
       // todo do i need to also run for third input?
       this->actOnInputChar(secondInput);
