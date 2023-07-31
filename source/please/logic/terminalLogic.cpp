@@ -1,5 +1,8 @@
 #include "terminalLogic.h"
 
+#include <stdio.h>
+#include <iostream>
+
 #ifdef _WIN32
 #include <windows.h>
 #include <conio.h>
@@ -16,7 +19,6 @@ void terminalLogic::initTerminal() {
 
 int (*terminalLogic::getCharacterInputListener())() { return &_getch; };
 #else
-#include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
 
@@ -36,3 +38,18 @@ void terminalLogic::initTerminal() {
 
 int (*terminalLogic::getCharacterInputListener())() { return &getchar; };
 #endif
+
+
+terminalLogic::CursorPosition terminalLogic::getCursorPosition(){
+  std::cout << "\033[6n";
+  int input, column, row;
+
+  std::string output = "";
+  // todo not use _getch
+  while ((input = _getch()) != 'R') {
+    output.push_back(static_cast<char>(input));
+  };
+
+  sscanf_s(output.c_str(), "\033[%d;%d", &row, &column);
+  return terminalLogic::CursorPosition{.column=column, .row=row};
+};
