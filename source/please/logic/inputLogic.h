@@ -12,6 +12,7 @@ class InputAction {
   void actOnEnterSequence();
   void actOnChar224Sequence();
   void actOnNormalKeyPress(int inputCharAsInt);
+  void actOnLeftArrow();
 
  public:
   InputAction(TerminalManager* terminalManagerPtr);
