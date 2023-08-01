@@ -45,8 +45,9 @@ terminalLogic::CursorPosition terminalLogic::getCursorPosition(){
   int input, column, row;
 
   std::string output = "";
-  // todo not use _getch
-  while ((input = _getch()) != 'R') {
+
+  int (*inputListenerFromFactory)() = terminalLogic::getCharacterInputListener();
+  while ((input = inputListenerFromFactory()) != 'R') {
     output.push_back(static_cast<char>(input));
   };
 

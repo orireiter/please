@@ -82,14 +82,15 @@ std::string TerminalManager::getCurrentPathDetailString() {
   return fullPath + " \u279C  ";
 };
 
-std::string TerminalManager::getCompleteCurrentActiveLine()
+std::string TerminalManager::getCompleteCurrentActiveLine(bool isAddInputAfterIndex)
 {
   std::string activeLine;
   activeLine += this->getCurrentPathDetailString();
   
   std::string currentInput = this->getCurrentInputString();
   if (currentInput.empty() == false) {
-      activeLine += currentInput;
+    int endIndex = (isAddInputAfterIndex == true) ? this->currentInputString.size() : this->currentIndexInInputString;
+    activeLine += currentInput.substr(0, endIndex);
   };
   
   return activeLine;
@@ -103,4 +104,8 @@ InputSuffix TerminalManager::getInputSuffix() {
 
   InputSuffix inputSuffix{.text=inputAfterCursor, .backspaces=backspaces};
   return inputSuffix;
+};
+
+terminalLogic::CursorPosition TerminalManager::getCursorPosition(){
+  return terminalLogic::getCursorPosition();
 };

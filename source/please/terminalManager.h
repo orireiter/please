@@ -3,6 +3,8 @@
 #include <set>
 #include <string>
 
+#include "logic/terminalLogic.h"
+
 struct InputSuffix {
   std::string text; 
   std::string backspaces; 
@@ -25,8 +27,9 @@ class TerminalManager {
   void clearCurrentInputString();
   void setIsExitAttempt(bool isExit);
   std::string getCurrentInputString();
-  std::string getCompleteCurrentActiveLine();
+  std::string getCompleteCurrentActiveLine(bool isAddInputAfterIndex = true);
   InputSuffix getInputSuffix();
+  terminalLogic::CursorPosition getCursorPosition();
 
  private:
   bool isExitAttempt;

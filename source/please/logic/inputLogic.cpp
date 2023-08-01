@@ -172,7 +172,14 @@ void inputLogic::InputAction::actOnLeftArrow(){
   };
 
   this->terminalManagerPtr->moveCurrentIndexXStepsBack(1);
+  
+  terminalLogic::CursorPosition cursorPosition = this->terminalManagerPtr->getCursorPosition();
+  if (cursorPosition.column > 1) {
   std::cout << '\b';
+  }
+  else {
+    std::cout << "\033[A" << this->terminalManagerPtr->getCompleteCurrentActiveLine(false);
+  };
 };
 
 void inputLogic::InputAction::actOnRightArrow(){
