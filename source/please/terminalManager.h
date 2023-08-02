@@ -5,9 +5,10 @@
 
 #include "logic/terminalLogic.h"
 
-struct InputSuffix {
-  std::string text; 
-  std::string backspaces; 
+struct CompleteActiveLine {
+  std::string prefix; 
+  std::string textToIndex;
+  std::string textAfterIndex; 
 }; 
 
 class TerminalManager {
@@ -27,13 +28,18 @@ class TerminalManager {
   void clearCurrentInputString();
   void setIsExitAttempt(bool isExit);
   std::string getCurrentInputString();
-  std::string getCompleteCurrentActiveLine(bool isAddInputAfterIndex = true);
-  InputSuffix getInputSuffix();
+  CompleteActiveLine getCompleteCurrentActiveLine();
+
   terminalLogic::CursorPosition getCursorPosition();
+  void setCursorPosition(terminalLogic::CursorPosition position);
+
+  terminalLogic::CursorPosition getCommandInitPosition();
+  void setCommandInitPosition();
 
  private:
   bool isExitAttempt;
   std::string currentInputString;
+  terminalLogic::CursorPosition commandInitPosition;
 
   void init();
   void listen();

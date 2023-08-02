@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <format>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -53,4 +54,9 @@ terminalLogic::CursorPosition terminalLogic::getCursorPosition(){
 
   sscanf_s(output.c_str(), "\033[%d;%d", &row, &column);
   return terminalLogic::CursorPosition{.column=column, .row=row};
+};
+
+void terminalLogic::setCursorPosition(terminalLogic::CursorPosition position) {
+  std::string setString = std::format("\033[{};{}H", position.row, position.column);
+  std::cout << setString;
 };

@@ -15,6 +15,8 @@ class InputAction {
   void actOnLeftArrow();
   void actOnRightArrow();
 
+  void reWriteActiveLine();
+
  public:
   InputAction(TerminalManager* terminalManagerPtr);
   void actOnInputChar(int inputChar);

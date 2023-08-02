@@ -10,5 +10,6 @@ struct CursorPosition {
 void initTerminal();
 
 CursorPosition getCursorPosition();
+void setCursorPosition(CursorPosition position);
 int (*getCharacterInputListener())();
 };  // namespace terminalLogic

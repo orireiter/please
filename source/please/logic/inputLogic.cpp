@@ -126,15 +126,25 @@ inputLogic::InputAction::InputAction(TerminalManager* terminalManagerPtr) {
   this->terminalManagerPtr = terminalManagerPtr;
 };
 
+void inputLogic::InputAction::reWriteActiveLine(){
+  terminalLogic::CursorPosition initPosition = this->terminalManagerPtr->getCommandInitPosition();
+  this->terminalManagerPtr->setCursorPosition(initPosition);
+  CompleteActiveLine line = this->terminalManagerPtr->getCompleteCurrentActiveLine();
+  std::cout << line.prefix << line.textToIndex;
+
+  terminalLogic::CursorPosition cursorPosition = this->terminalManagerPtr->getCursorPosition();
+  std::cout << line.textAfterIndex << "\033[K" << "\033[J";
+
+  this->terminalManagerPtr->setCursorPosition(cursorPosition);
+};
+
 void inputLogic::InputAction::actOnDeleteBackspaceSequence() {
   if (this->terminalManagerPtr->currentIndexInInputString == 0 || this->terminalManagerPtr->getCurrentInputString().empty()) {
     return;
   };
 
   this->terminalManagerPtr->popOneCharacterBeforeIndexInInput();
-
-  InputSuffix suffix = this->terminalManagerPtr->getInputSuffix();
-  std::cout << '\b' << suffix.text << " \b" << suffix.backspaces;
+  this->reWriteActiveLine();
 };
 
 void inputLogic::InputAction::actOnEnterSequence() {
@@ -152,18 +162,21 @@ void inputLogic::InputAction::actOnEnterSequence() {
     std::cout << commandOutput;
     this->terminalManagerPtr->clearCurrentInputString();
   } catch (const PleaseExceptions::PleaseException& e) {
+    e;
     this->terminalManagerPtr->resetCurrentIndexToEnd();
+    std::cout << '\n';
     // todo rewrite path (and current command?) + in case of posix we need to show this error, mac shows it even when there's nothing here
   };
-  std::cout << this->terminalManagerPtr->getCompleteCurrentActiveLine();
+
+  this->terminalManagerPtr->setCommandInitPosition();
+  CompleteActiveLine line = this->terminalManagerPtr->getCompleteCurrentActiveLine();
+  std::cout << line.prefix << line.textToIndex << line.textAfterIndex;
 };
 
 void inputLogic::InputAction::actOnNormalKeyPress(int inputCharAsInt){
   char asChar = static_cast<char>(inputCharAsInt);
   this->terminalManagerPtr->appendCharactertoCurrentInputString(asChar);
-
-  InputSuffix suffix = this->terminalManagerPtr->getInputSuffix();
-  std::cout << asChar << suffix.text << suffix.backspaces;
+  this->reWriteActiveLine();
 };
 
 void inputLogic::InputAction::actOnLeftArrow(){
@@ -175,10 +188,10 @@ void inputLogic::InputAction::actOnLeftArrow(){
   
   terminalLogic::CursorPosition cursorPosition = this->terminalManagerPtr->getCursorPosition();
   if (cursorPosition.column > 1) {
-  std::cout << '\b';
+    std::cout << '\b';
   }
   else {
-    std::cout << "\033[A" << this->terminalManagerPtr->getCompleteCurrentActiveLine(false);
+    this->reWriteActiveLine();
   };
 };
 
