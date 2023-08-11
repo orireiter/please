@@ -1,0 +1,7 @@
+#define IDI_ICON1 101  // Icon resource ID
+
+#ifdef _WIN32
+    IDI_ICON1 ICON "../resources/windows.ico"  // Specify the path to your icon file
+#else
+    IDI_ICON1 ICON "../resources/macos.icns"  // Specify the path to your icon file
+#endif

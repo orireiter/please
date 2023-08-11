@@ -36,3 +36,11 @@ Left To Dos:
     - simple left/right.✅
     - add stuff like (alt/ctrl/shift) + arrows.
 10. support unix interactive shell commands and any bidirectional commmands (history, ping, etc...).
+
+
+This icon used was generated using the following graphics from Twitter Twemoji:
+
+- Graphics Title: 1f64f.svg
+- Graphics Author: Copyright 2020 Twitter, Inc and other contributors (https://github.com/twitter/twemoji)
+- Graphics Source: https://github.com/twitter/twemoji/blob/master/assets/svg/1f64f.svg
+- Graphics License: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
