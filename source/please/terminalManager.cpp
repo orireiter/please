@@ -27,8 +27,10 @@ void TerminalManager::listen() {
   int inputCharacter;
 
   inputLogic::InputAction inputAction = inputLogic::InputAction(this);
+  CompleteActiveLine line = this->getCompleteCurrentActiveLine();
 
-  std::cout << this->getCompleteCurrentActiveLine();
+  this->setCommandInitPosition();
+  std::cout << line.prefix << line.textToIndex << line.textAfterIndex;
   while (this->isExitAttempt == false && (inputCharacter = this->inputListener()) != EOF) {
     inputAction.actOnInputChar(inputCharacter);
   };
@@ -82,25 +84,30 @@ std::string TerminalManager::getCurrentPathDetailString() {
   return fullPath + " \u279C  ";
 };
 
-std::string TerminalManager::getCompleteCurrentActiveLine()
+CompleteActiveLine TerminalManager::getCompleteCurrentActiveLine()
 {
-  std::string activeLine;
-  activeLine += this->getCurrentPathDetailString();
-  
   std::string currentInput = this->getCurrentInputString();
-  if (currentInput.empty() == false) {
-      activeLine += currentInput;
-  };
   
-  return activeLine;
+  CompleteActiveLine line{
+    .prefix=this->getCurrentPathDetailString(), 
+    .textToIndex=currentInput.substr(0, this->currentIndexInInputString),
+    .textAfterIndex=currentInput.substr(this->currentIndexInInputString)};
+  return line;
 };
 
-InputSuffix TerminalManager::getInputSuffix() {
-  std::string inputAfterCursor = this->currentInputString.substr(this->currentIndexInInputString);
+terminalLogic::CursorPosition TerminalManager::getCursorPosition(){
+  return terminalLogic::getCursorPosition();
+};
 
-  int backspacesAmount = this->currentInputString.size() - this->currentIndexInInputString;
-  std::string backspaces(backspacesAmount, '\b');
+void TerminalManager::setCursorPosition(terminalLogic::CursorPosition position) {
+  terminalLogic::setCursorPosition(position);
+};
 
-  InputSuffix inputSuffix{.text=inputAfterCursor, .backspaces=backspaces};
-  return inputSuffix;
+terminalLogic::CursorPosition TerminalManager::getCommandInitPosition() {
+  return this->commandInitPosition;
+};
+
+void TerminalManager::setCommandInitPosition(){
+  terminalLogic::CursorPosition position = terminalLogic::getCursorPosition();
+  this->commandInitPosition = position;
 };

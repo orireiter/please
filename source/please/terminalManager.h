@@ -3,9 +3,12 @@
 #include <set>
 #include <string>
 
-struct InputSuffix {
-  std::string text; 
-  std::string backspaces; 
+#include "logic/terminalLogic.h"
+
+struct CompleteActiveLine {
+  std::string prefix; 
+  std::string textToIndex;
+  std::string textAfterIndex; 
 }; 
 
 class TerminalManager {
@@ -25,12 +28,18 @@ class TerminalManager {
   void clearCurrentInputString();
   void setIsExitAttempt(bool isExit);
   std::string getCurrentInputString();
-  std::string getCompleteCurrentActiveLine();
-  InputSuffix getInputSuffix();
+  CompleteActiveLine getCompleteCurrentActiveLine();
+
+  terminalLogic::CursorPosition getCursorPosition();
+  void setCursorPosition(terminalLogic::CursorPosition position);
+
+  terminalLogic::CursorPosition getCommandInitPosition();
+  void setCommandInitPosition();
 
  private:
   bool isExitAttempt;
   std::string currentInputString;
+  terminalLogic::CursorPosition commandInitPosition;
 
   void init();
   void listen();
